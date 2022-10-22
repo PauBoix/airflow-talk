@@ -25,7 +25,7 @@ with DAG(
     @task()
     def task_c():
         print("Task ran after noon")
-    
+
 
 
     task_branch >> task_b()

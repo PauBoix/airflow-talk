@@ -4,6 +4,8 @@ from airflow.operators.python import PythonVirtualenvOperator
 
 def get_bitcoin_price(data_interval_start, data_interval_end):
     import yfinance as yf
+    print(data_interval_start)
+    print(data_interval_end)
     data = yf.download(tickers='BTC-USD', start=data_interval_start, end=data_interval_end, interval = '1m')
     print(data)
 
@@ -14,8 +16,8 @@ with DAG(
     catchup = True,
 ) as dag:
     # @task.virtualenv(
-    #     task_id="virtualenv_python", 
-    #     requirements=["yfinance"], 
+    #     task_id="virtualenv_python",
+    #     requirements=["yfinance"],
     #     system_site_packages=True,
     #     provide_context=True,
     #     # op_kwargs={
@@ -29,7 +31,7 @@ with DAG(
     task_virtualenv = PythonVirtualenvOperator(
         task_id="task_virtualenv",
         python_callable=get_bitcoin_price,
-        requirements=["yfinance"], 
+        requirements=["yfinance"],
         system_site_packages=True,
         # op_kwargs={
         #     "data_interval_start": "{{ data_interval_start }}",

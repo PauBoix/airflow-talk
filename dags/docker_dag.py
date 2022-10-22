@@ -9,18 +9,11 @@ with DAG(
     catchup = True,
 ) as dag:
 
-    def get_bitcoin_price(data_interval_start, data_interval_end):
-
-        import yfinance as yf
-
-        data = yf.download(tickers='BTC-USD', start=data_interval_start, end=data_interval_end, interval = '1m')
-        print(data)
-
     task_docker = DockerOperator(
         task_id="task_docker",
-        container_name="",
-        image = '',
-        command = 'python3 bitcoin_data.py "{{ data_interval_start }}" "{{ data_interval_end }}"'
+        image = 'bitcoin_image:latest',
+        command = 'python3 bitcoin_data.py "{{ data_interval_start }}" "{{ data_interval_end }}"',
+        docker_url='unix://var/run/docker.sock',
         network_mode='bridge',
         auto_remove = True,
     )
